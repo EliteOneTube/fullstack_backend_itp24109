@@ -17,11 +17,14 @@ async def main():
     neo4j_topic = "users-topic"
 
     # Create Kafka topics
-    admin_client = KafkaAdminClient(bootstrap_servers="kafka:9092")
-    admin_client.create_topics([
-        NewTopic(name=mysql_topic, num_partitions=1, replication_factor=1),
-        NewTopic(name=neo4j_topic, num_partitions=1, replication_factor=1)
-    ])
+    try:
+        admin_client = KafkaAdminClient(bootstrap_servers="kafka:9092")
+        admin_client.create_topics([
+            NewTopic(name=mysql_topic, num_partitions=1, replication_factor=1),
+            NewTopic(name=neo4j_topic, num_partitions=1, replication_factor=1)
+        ])
+    except Exception as e:
+        pass
 
     # Universal Kafka Producers
     mysql_producer = KafkaProducerImpl(

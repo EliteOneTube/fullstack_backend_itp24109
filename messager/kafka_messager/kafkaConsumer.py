@@ -5,10 +5,11 @@ from pymongo import MongoClient
 
 
 class KafkaConsumerHandler:
-    def __init__(self, kafka_brokers: str, mongo_uri: str, mongo_db: str, mongo_collection: str):
+    def __init__(self, kafka_brokers: str, mongo_uri: str, mongo_db: str, mongo_collection: list[str]):
         self.kafka_brokers = kafka_brokers
         self.mongo_client = MongoClient(mongo_uri)
-        self.mongo_collection = self.mongo_client[mongo_db][mongo_collection]
+        self.mongo_db = self.mongo_client[mongo_db]
+        self.mongo_collection = self.mongo_db[mongo_collection]
         self.consumer = None
 
     def connect(self) -> None:

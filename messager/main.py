@@ -45,9 +45,9 @@ async def main():
     # Kafka Consumer for Data Fusion
     kafka_consumer = KafkaConsumerHandler(
         kafka_brokers="kafka:9092",
-        mongo_uri="mongodb://localhost:27017/",
+        mongo_uri="mongodb://mongodb:27017/",
         mongo_db="fusion_db",
-        mongo_collection="fused_data"
+        mongo_collections=["clothes", "users"]
     )
 
     # Connect Kafka Consumer to the topics

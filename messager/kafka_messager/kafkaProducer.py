@@ -24,15 +24,12 @@ class KafkaProducerImpl(AbstractProducer):
     def produce(self):
         """Fetch data from the data source and publish to Kafka."""
         print(f"Producing data to Kafka topic: {self.topic}")
-        try:
-            print("Starting Kafka producer...")
-            data = self.data_source.fetch_data(self.rate_limit)
-            for item in data[:self.rate_limit]:
-                print(f"Publishing message: {item}")
-                self.producer.send(self.topic, json.dumps(item).encode())
-            self.producer.flush()
-        finally:
-            self.producer.stop()
+        data = self.data_source.fetch_data(self.rate_limit)
+        for item in data[:self.rate_limit]:
+            print(f"Publishing message: {item}")
+            self.producer.send(self.topic, json.dumps(item).encode())
+        self.producer.flush()
+        
 
     async def start(self):
         """Start the Kafka producer."""

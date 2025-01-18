@@ -7,8 +7,10 @@ WORKDIR /app
 # Copy the application code into the container
 COPY . .
 
+COPY ../requirements.txt /app/requirements.txt
+
 # Install dependencies
-RUN pip install --no-cache-dir -r ../requirements.txt
+RUN pip install --no-cache-dir -r /app/requirements.txt
 
 # Command to run your Python script
 CMD ["python", "main.py"]

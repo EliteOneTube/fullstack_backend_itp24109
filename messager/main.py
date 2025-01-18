@@ -20,14 +20,14 @@ async def main():
 
     # Universal Kafka Producers
     mysql_producer = UniversalKafkaProducer(
-        brokers="localhost:9092",
+        brokers="kafka:9092",
         topic=mysql_topic,
         data_source=mysql_source,
         rate_limit=10,  # Publish 10 messages per interval
         producer=kafka_producer
     )
     neo4j_producer = UniversalKafkaProducer(
-        brokers="localhost:9092",
+        brokers="kafka:9092",
         topic=neo4j_topic,
         data_source=neo4j_source,
         rate_limit=5,  # Publish 5 messages per interval
@@ -36,7 +36,7 @@ async def main():
 
     # Kafka Consumer for Data Fusion
     kafka_consumer = KafkaConsumerHandler(
-        kafka_brokers="localhost:9092",
+        kafka_brokers="kafka:9092",
         mongo_uri="mongodb://localhost:27017/",
         mongo_db="fusion_db",
         mongo_collection="fused_data"

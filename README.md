@@ -38,6 +38,9 @@ To populate the databases with dummy data for testing, you can run the following
 ### Mysql
 ```bash
 docker exec -i mysql mysql -u root -prootpassword < scripts/mysql/create_database.sql
+```
+
+```bash
 docker exec -i mysql mysql -u root -prootpassword < scripts/mysql/clothes.sql
 ```
 
@@ -48,7 +51,7 @@ python scripts/neo4j/generate_neo4j_data.py
 ```
 
 ```bash
-docker exec -i neo4j cypher-shell -u neo4j -p password < scripts/neo4j/neo4j_data.cypher
+docker exec -i neo4j cypher-shell -u neo4j -p password < neo4j_data.cypher
 ```
 ## Authors
 

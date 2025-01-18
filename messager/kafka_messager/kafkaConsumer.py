@@ -2,6 +2,7 @@ import asyncio
 import json
 from kafka import KafkaConsumer
 from pymongo import MongoClient
+from consumer import AbstractConsumer
 
 
 class KafkaConsumerHandler(AbstractConsumer):

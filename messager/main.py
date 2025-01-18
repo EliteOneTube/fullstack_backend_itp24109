@@ -45,6 +45,9 @@ async def main():
     # Run Producers and Consumer concurrently
     s.enter(10, 1, mysql_producer.produce)
     s.enter(20, 1, neo4j_producer.produce)
+
+    s.run()
+
     kafka_consumer.consume()
 
 

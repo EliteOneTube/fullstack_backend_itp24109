@@ -8,7 +8,7 @@ from sources.neo4j_source import Neo4jDataSource
 
 async def main():
     # MySQL Data Source
-    mysql_source = MySQLDataSource(host="localhost", user="root", password="rootpassword", database="ClothingStore")
+    mysql_source = MySQLDataSource(host="mysql", user="root", password="rootpassword", database="ClothingStore")
     mysql_topic = "clothes-topic"
 
     # Neo4j Data Source

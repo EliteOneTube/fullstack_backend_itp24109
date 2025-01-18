@@ -21,6 +21,7 @@ class KafkaProducerImpl(AbstractProducer):
         self.rate_limit = rate_limit
         self.producer = KafkaProducer(bootstrap_servers=brokers)
 
+    @staticmethod
     def json_serial(obj):
         """JSON serializer for objects not serializable by default."""
         if isinstance(obj, Decimal):
@@ -35,7 +36,7 @@ class KafkaProducerImpl(AbstractProducer):
         for item in data:
             # Use the custom serializer
             print(f"Producing item: {item}")
-            serialized_data = json.dumps(item, default=self.json_serial).encode()
+            serialized_data = json.dumps(item, default=KafkaProducerImpl.json_serial).encode()
             print(f"Publishing message: {serialized_data}")
             self.producer.send(self.topic, serialized_data)
         self.producer.flush()

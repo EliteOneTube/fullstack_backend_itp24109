@@ -5,14 +5,14 @@ from pymongo import MongoClient
 
 
 class KafkaConsumerHandler:
-    def __init__(self, kafka_brokers: str, mongo_uri: str, mongo_db: str, mongo_collection: list[str]):
+    def __init__(self, kafka_brokers: str, mongo_uri: str, mongo_db: str, mongo_collections: list[str]):
         self.kafka_brokers = kafka_brokers
         self.mongo_client = MongoClient(mongo_uri)
         self.mongo_db = self.mongo_client[mongo_db]
         self.consumer = None
 
         # Create MongoDB collections
-        for collection in mongo_collection:
+        for collection in mongo_collections:
             if collection not in self.mongo_db.list_collection_names():
                 self.mongo_db.create_collection(collection)
 

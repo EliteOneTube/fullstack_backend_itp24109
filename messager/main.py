@@ -1,7 +1,7 @@
 import asyncio
-from kafka.kafkaProducer import KafkaProducerImpl
-from kafka.kafkaConsumer import KafkaConsumerHandler
-from producer import UniversalKafkaProducer
+from kafka_messager.kafkaProducer import KafkaProducerImpl
+from kafka_messager.kafkaConsumer import KafkaConsumerHandler
+from kafka_messager.kafkaProducer import UniversalKafkaProducer
 from sources.mysql_source import MySQLDataSource
 from sources.neo4j_source import Neo4jDataSource
 

@@ -2,7 +2,7 @@
 
 # Check MySQL
 echo "Waiting for MySQL..."
-until nc -z -v -w30 $MYSQL_HOST $MYSQL_PORT
+until nc -z -v -w30 mysql 3306
 do
   echo "Waiting for MySQL connection..."
   sleep 5

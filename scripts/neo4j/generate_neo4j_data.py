@@ -1,6 +1,6 @@
 import random
 
-def generate_neo4j_data(num_users=100, max_purchased=1000, filename="neo4j_data.cypher"):
+def generate_neo4j_data(num_users=100, max_purchased=1000, filename="./neo4j_data.cypher"):
     with open(filename, "w") as f:
         # Create users with random purchases
         for user_id in range(1, num_users + 1):

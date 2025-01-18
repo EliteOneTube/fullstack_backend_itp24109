@@ -22,20 +22,20 @@ class KafkaProducerImpl(AbstractProducer):
         self.rate_limit = rate_limit
         self.producer = KafkaProducer(bootstrap_servers=brokers)
 
+    def json_serial(obj):
+        """JSON serializer for objects not serializable by default."""
+        if isinstance(obj, Decimal):
+            return float(obj)
+        raise TypeError(f"Type {type(obj)} not serializable")
 
-    def preprocess_data(data):
-        """Convert non-serializable fields in data."""
-        for item in data:
-            if isinstance(item.get("price"), Decimal):
-                item["price"] = float(item["price"])
-        return data
 
     def produce(self):
         """Fetch data from the data source and publish to Kafka."""
         print(f"Producing data to Kafka topic: {self.topic}")
-        data = self.preprocess_data(self.data_source.fetch_data(self.rate_limit))
+        data = self.data_source.fetch_data(self.rate_limit)
         for item in data[:self.rate_limit]:
-            serialized_data = json.dumps(item).encode()
+            # Use the custom serializer
+            serialized_data = json.dumps(item, default=self.json_serial).encode()
             print(f"Publishing message: {serialized_data}")
             self.producer.send(self.topic, serialized_data)
         self.producer.flush()

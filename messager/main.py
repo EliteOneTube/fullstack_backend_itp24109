@@ -16,13 +16,13 @@ async def main():
 
     # Universal Kafka Producers
     mysql_producer = KafkaProducerImpl(
-        brokers="kafka:9092",
+        brokers="localhost:9092",
         topic=mysql_topic,
         data_source=mysql_source,
         rate_limit=10  # Publish 10 messages per interval
     )
     neo4j_producer = KafkaProducerImpl(
-        brokers="kafka:9092",
+        brokers="localhost:9092",
         topic=neo4j_topic,
         data_source=neo4j_source,
         rate_limit=5  # Publish 5 messages per interval

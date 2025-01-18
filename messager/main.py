@@ -20,12 +20,14 @@ async def main():
         topic=mysql_topic,
         data_source=mysql_source,
         rate_limit=10  # Publish 10 messages per interval
+        time_interval=10  # Sleep for 5 seconds after each interval
     )
     neo4j_producer = KafkaProducerImpl(
         brokers="kafka:9092",
         topic=neo4j_topic,
         data_source=neo4j_source,
         rate_limit=5  # Publish 5 messages per interval
+        time_interval=5  # Sleep for 10 seconds after each interval
     )
 
     # Kafka Consumer for Data Fusion

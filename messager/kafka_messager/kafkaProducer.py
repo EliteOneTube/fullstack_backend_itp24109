@@ -6,7 +6,7 @@ from source import DataSource
 
 class KafkaProducerImpl:
     """A universal Kafka producer."""
-    def __init__(self, brokers: str, topic: str, data_source: DataSource, rate_limit: int):
+    def __init__(self, brokers: str, topic: str, data_source: DataSource, rate_limit: int, time_interval: int):
         """
         Args:
             brokers (str): Kafka broker addresses.
@@ -19,6 +19,7 @@ class KafkaProducerImpl:
         self.data_source = data_source
         self.rate_limit = rate_limit
         self.producer = KafkaProducer(bootstrap_servers=brokers)
+        self.time_interval = time_interval
 
     @staticmethod
     def json_serial(obj):
@@ -36,7 +37,7 @@ class KafkaProducerImpl:
             # Use the custom serializer
             serialized_data = json.dumps(item, default=KafkaProducerImpl.json_serial).encode()
             self.producer.send(self.topic, serialized_data)
-            self.producer.flush()
+        self.producer.flush()
         
 
     async def start(self):
@@ -51,5 +52,5 @@ class KafkaProducerImpl:
     def run_and_sleep(self):
         """Run the producer and sleep for a specified interval."""
         self.produce()
-        time.sleep(self.rate_limit)
+        time.sleep(self.time_interval)
         self.run_and_sleep()

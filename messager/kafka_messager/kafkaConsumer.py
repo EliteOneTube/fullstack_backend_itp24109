@@ -11,7 +11,7 @@ class KafkaConsumerHandler:
         self.mongo_collection = self.mongo_client[mongo_db][mongo_collection]
         self.consumer = None
 
-    def connect(self, topic: str) -> None:
+    def connect(self) -> None:
         """Connect the Kafka consumer to the specified topic."""
         self.consumer = KafkaConsumer(
             bootstrap_servers=self.kafka_brokers,
@@ -20,8 +20,6 @@ class KafkaConsumerHandler:
             enable_auto_commit=True,
             value_deserializer=lambda x: json.loads(x.decode('utf-8'))
         )
-
-        print(f"Connected to topic: {topic}")
 
     def consume(self) -> None:
         """Start consuming messages from Kafka."""

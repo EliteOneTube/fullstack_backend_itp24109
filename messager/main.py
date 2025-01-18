@@ -39,8 +39,9 @@ async def main():
     s = sched.scheduler(time.time, time.sleep)
 
     # Connect Kafka Consumer to the topics
-    kafka_consumer.connect(mysql_topic)
-    kafka_consumer.connect(neo4j_topic)
+    kafka_consumer.connect()
+
+    kafka_consumer.consumer.subscribe([mysql_topic, neo4j_topic])
 
     await asyncio.gather(
         mysql_producer.produce(),

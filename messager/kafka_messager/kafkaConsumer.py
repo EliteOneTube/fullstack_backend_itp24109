@@ -14,15 +14,12 @@ class KafkaConsumerHandler:
     def connect(self, topic: str) -> None:
         """Connect the Kafka consumer to the specified topic."""
         self.consumer = KafkaConsumer(
-            topic,
             bootstrap_servers=self.kafka_brokers,
             auto_offset_reset='earliest',
             group_id='fusion_group',
             enable_auto_commit=True,
             value_deserializer=lambda x: json.loads(x.decode('utf-8'))
         )
-
-        self.consumer.subscribe([topic])
 
         print(f"Connected to topic: {topic}")
 
@@ -32,24 +29,23 @@ class KafkaConsumerHandler:
             raise RuntimeError("Kafka consumer is not connected to any topic.")
 
         print("Starting to consume messages...")
-        print(dir(self.consumer))
         for message in self.consumer:
             try:
-                print(f"Received message: {payload}")
-                if "clothes" in payload and "users" in payload:
+                print(f"Received message: {message}")
+                if "clothes" in message and "users" in message:
                     # Perform data fusion
                     fused_data = {
-                        "clothesID": payload["clothes"]["id"],
-                        "style": payload["clothes"]["style"],
-                        "price": payload["clothes"]["price"],
-                        "userID": payload["users"]["id"],
-                        "connections": payload["users"]["connections"],
+                        "clothesID": message["clothes"]["id"],
+                        "style": message["clothes"]["style"],
+                        "price": message["clothes"]["price"],
+                        "userID": message["users"]["id"],
+                        "connections": message["users"]["connections"],
                     }
                     # Store the fused data in MongoDB
                     self.mongo_collection.insert_one(fused_data)
                     print(f"Fused data inserted: {fused_data}")
                 else:
-                    print(f"Invalid payload: {payload}")
+                    print(f"Invalid message: {message}")
             except Exception as e:
                 print(f"Error handling message: {e}")
         

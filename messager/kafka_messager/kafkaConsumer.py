@@ -37,6 +37,6 @@ class KafkaConsumerHandler:
         for message in self.consumer:
             #If the topic is 'clothes-topic', insert the data into the MongoDB collection 'clothes', else insert into 'users'
             if message.topic == 'clothes-topic':
-                self.mongo_collections['clothes'].insert_one(message.value)
+                self.mongo_db['clothes'].insert_one(message.value)
             elif message.topic == 'users-topic':
-                self.mongo_collections['users'].insert_one(message.value)
+                self.mongo_db['users'].insert_one(message.value)

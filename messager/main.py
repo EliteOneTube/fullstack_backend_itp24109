@@ -42,13 +42,11 @@ async def main():
     kafka_consumer.connect(mysql_topic)
     kafka_consumer.connect(neo4j_topic)
 
-    # Run Producers and Consumer concurrently
-    s.enter(1, 1, mysql_producer.produce)
-    s.enter(1, 1, neo4j_producer.produce)
-
-    s.run()
-
-    kafka_consumer.consume()
+    await asyncio.gather(
+        mysql_producer.produce(),
+        neo4j_producer.produce(),
+        kafka_consumer.consume()
+    )
 
 
 if __name__ == "__main__":

@@ -16,7 +16,7 @@ async def main():
     neo4j_topic = "users-topic"
 
     # Kafka Producer Implementation
-    kafka_producer = KafkaProducerImpl(bootstrap_servers="localhost:9092")
+    kafka_producer = KafkaProducerImpl(bootstrap_servers="kafka:9092")
 
     # Universal Kafka Producers
     mysql_producer = UniversalKafkaProducer(

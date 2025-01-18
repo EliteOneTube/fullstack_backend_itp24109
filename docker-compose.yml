@@ -79,6 +79,7 @@ services:
       NEO4J_PASSWORD: password
       MONGODB_URI: mongodb://mongodb:27017
       KAFKA_BROKERS: kafka:9092
+      PYTHONUNBUFFERED: 1
 
 volumes:
   mysql_data:

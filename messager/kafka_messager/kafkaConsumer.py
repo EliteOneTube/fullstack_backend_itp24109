@@ -29,4 +29,8 @@ class KafkaConsumerHandler:
         
         print("Starting to consume messages...")
         for message in self.consumer:
-            print(f"Received message: {message}")
+            #If the topic is 'clothes-topic', insert the data into the MongoDB collection 'clothes', else insert into 'users'
+            if message.topic == 'clothes-topic':
+                self.mongo_collection.insert_one(message.value)
+            elif message.topic == 'users-topic':
+                self.mongo_collection.insert_one(message.value)

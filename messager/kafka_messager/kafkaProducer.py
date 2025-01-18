@@ -48,8 +48,8 @@ class KafkaProducerImpl:
         """Stop the producer."""
         self.producer.close()
 
-    async def run_and_sleep(self):
+    def run_and_sleep(self):
         """Run the producer and sleep for a specified interval."""
-        await self.produce()
-        await asyncio.sleep(self.rate_limit)
-        await self.run_and_sleep()
+        self.produce()
+        asyncio.sleep(self.rate_limit)
+        self.run_and_sleep()

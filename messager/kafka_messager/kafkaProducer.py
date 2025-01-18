@@ -21,18 +21,18 @@ class KafkaProducerImpl(AbstractProducer):
         self.rate_limit = rate_limit
         self.producer = KafkaProducer(bootstrap_servers=brokers)
 
-    async def produce(self):
+    def produce(self):
         """Fetch data from the data source and publish to Kafka."""
         print(f"Producing data to Kafka topic: {self.topic}")
         try:
             print("Starting Kafka producer...")
-            data = await self.data_source.fetch_data(self.rate_limit)
+            data = self.data_source.fetch_data(self.rate_limit)
             for item in data[:self.rate_limit]:
                 print(f"Publishing message: {item}")
                 self.producer.send(self.topic, json.dumps(item).encode())
             self.producer.flush()
         finally:
-            await self.producer.stop()
+            self.producer.stop()
 
     async def start(self):
         """Start the Kafka producer."""

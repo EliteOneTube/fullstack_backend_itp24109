@@ -11,7 +11,7 @@ class MySQLDataSource(DataSource):
         )
         self.cursor = self.connection.cursor(dictionary=True)
 
-    async def fetch_data(self, rate_limit: int) -> list:
+    def fetch_data(self, rate_limit: int) -> list:
         """Fetch data from MySQL."""
         query = "SELECT * FROM clothes LIMIT %s" % rate_limit
         self.cursor.execute(query)

@@ -3,11 +3,7 @@ from kafka_messager.kafkaProducer import KafkaProducerImpl
 from kafka_messager.kafkaConsumer import KafkaConsumerHandler
 from sources.mysql_source import MySQLDataSource
 from sources.neo4j_source import Neo4jDataSource
-
-async def run_producer_with_interval(producer, interval):
-    while True:
-        await producer.produce()
-        await asyncio.sleep(interval)
+import sched, time
 
 async def main():
     # MySQL Data Source
@@ -40,15 +36,17 @@ async def main():
         mongo_collection="fused_data"
     )
 
+    s = sched.scheduler(time.time, time.sleep)
+
     # Connect Kafka Consumer to the topics
     kafka_consumer.connect(mysql_topic)
     kafka_consumer.connect(neo4j_topic)
 
     # Run Producers and Consumer concurrently
     await asyncio.gather(
-        run_producer_with_interval(mysql_producer, 10),  # Produce MySQL data every 10 seconds
-        run_producer_with_interval(neo4j_producer, 20),  # Produce Neo4j data every 20 seconds
-        kafka_consumer.consume(),  # Continuously consume and fuse data
+        s.enter(10, 1, mysql_producer.produce),
+        s.enter(20, 1, neo4j_producer.produce),
+        kafka_consumer.consume()
     )
 
 

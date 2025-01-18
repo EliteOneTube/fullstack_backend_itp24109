@@ -31,8 +31,8 @@ class KafkaProducerImpl(AbstractProducer):
                 print(f"Publishing message: {item}")
                 self.producer.send(self.topic, json.dumps(item).encode())
             self.producer.flush()
-        except Exception as e:
-            print(f"Error in produce: {e}")
+        finally:
+            await self.producer.stop()
 
     async def start(self):
         """Start the Kafka producer."""

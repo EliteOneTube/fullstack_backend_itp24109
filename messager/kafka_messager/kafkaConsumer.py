@@ -36,6 +36,7 @@ class KafkaConsumerHandler(AbstractConsumer):
     async def handle(self, payload: dict) -> None:
         """Handle a single message payload."""
         try:
+            print(f"Received message: {payload}")
             if "clothes" in payload and "users" in payload:
                 # Perform data fusion
                 fused_data = {

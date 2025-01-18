@@ -38,9 +38,8 @@ class KafkaProducerImpl:
             # Use the custom serializer
             serialized_data = json.dumps(item, default=KafkaProducerImpl.json_serial).encode()
             self.producer.send(self.topic, serialized_data)
-            print(f"Published message: {serialized_data}")
         self.producer.flush()
-
+ 
     def run_and_sleep(self):
         """Run the producer and sleep for a specified interval."""
         self.produce()

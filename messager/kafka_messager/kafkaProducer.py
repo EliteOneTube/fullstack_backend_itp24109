@@ -36,7 +36,7 @@ class KafkaProducerImpl:
             # Use the custom serializer
             serialized_data = json.dumps(item, default=KafkaProducerImpl.json_serial).encode()
             self.producer.send(self.topic, serialized_data)
-        self.producer.flush()
+            self.producer.flush()
         
 
     async def start(self):

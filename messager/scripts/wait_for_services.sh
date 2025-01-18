@@ -35,4 +35,4 @@ done
 echo "All services are up and ready!"
 
 # Once the services are ready, start the main application
-python ../main.py
+python main.py

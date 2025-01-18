@@ -27,7 +27,7 @@ All passwords have a default value in `docker-compose.yml`. (Keep in mind that y
 The location of where the data is saved is also configurable in `docker-compose.yml`.
 ## Installation
     
-- Will raise 5 containers. One for each database, one for flask server and one for Kafka.
+- Will raise 5 containers. One for each database, one for flask server, one for Kafka and one for the producers & consumers of Kafka.
 ```bash
 docker compose up -d
 ```

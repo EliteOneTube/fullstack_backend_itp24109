@@ -30,6 +30,7 @@ class KafkaConsumerHandler(AbstractConsumer):
             raise RuntimeError("Kafka consumer is not connected to any topic.")
 
         print("Starting to consume messages...")
+        print(self.consumer)
         for message in self.consumer:
             self.handle(message.value)
 

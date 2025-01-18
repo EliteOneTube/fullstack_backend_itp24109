@@ -11,7 +11,7 @@ async def main():
     mysql_topic = "clothes-topic"
 
     # Neo4j Data Source
-    neo4j_source = Neo4jDataSource(uri="bolt://localhost:7687", user="neo4j", password="password")
+    neo4j_source = Neo4jDataSource(uri="bolt://neo4j:7687", user="neo4j", password="password")
     neo4j_topic = "users-topic"
 
     # Universal Kafka Producers

@@ -13,6 +13,7 @@ class MySQLDataSource(DataSource):
 
     async def fetch_data(self) -> list:
         """Fetch data from MySQL."""
+        print("Fetching data from MySQL...")
         query = "SELECT * FROM clothes LIMIT 10;"
         self.cursor.execute(query)
         result = self.cursor.fetchall()

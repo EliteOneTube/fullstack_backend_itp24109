@@ -4,6 +4,8 @@ from kafka_messager.kafkaConsumer import KafkaConsumerHandler
 from sources.mysql_source import MySQLDataSource
 from sources.neo4j_source import Neo4jDataSource
 from concurrent.futures import ThreadPoolExecutor
+from kafka.admin import NewTopic
+from kafka import KafkaAdminClient
 
 async def main():
     # MySQL Data Source
@@ -13,6 +15,13 @@ async def main():
     # Neo4j Data Source
     neo4j_source = Neo4jDataSource(uri="bolt://neo4j:7687", user="neo4j", password="password")
     neo4j_topic = "users-topic"
+
+    # Create Kafka topics
+    admin_client = KafkaAdminClient(bootstrap_servers="kafka:9092")
+    admin_client.create_topics([
+        NewTopic(name=mysql_topic, num_partitions=1, replication_factor=1),
+        NewTopic(name=neo4j_topic, num_partitions=1, replication_factor=1)
+    ])
 
     # Universal Kafka Producers
     mysql_producer = KafkaProducerImpl(

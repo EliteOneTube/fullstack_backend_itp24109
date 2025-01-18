@@ -41,6 +41,7 @@ class UniversalKafkaProducer:
 
     async def produce(self, interval: int):
         """Fetch data from the data source and publish to Kafka."""
+        print(f"Producing data to Kafka topic: {self.topic}")
         try:
             print("Starting Kafka producer...")
             while True:

@@ -10,6 +10,7 @@ class KafkaConsumerHandler:
         self.mongo_client = MongoClient(mongo_uri)
         self.mongo_db = self.mongo_client[mongo_db]
         self.consumer = None
+        self.mongo_collections = mongo_collections
 
         # Create MongoDB collections
         for collection in mongo_collections:
@@ -36,6 +37,6 @@ class KafkaConsumerHandler:
         for message in self.consumer:
             #If the topic is 'clothes-topic', insert the data into the MongoDB collection 'clothes', else insert into 'users'
             if message.topic == 'clothes-topic':
-                self.mongo_collection.insert_one(message.value)
+                self.mongo_collections['clothes'].insert_one(message.value)
             elif message.topic == 'users-topic':
-                self.mongo_collection.insert_one(message.value)
+                self.mongo_collections['users'].insert_one(message.value)

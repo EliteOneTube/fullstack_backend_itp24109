@@ -2,8 +2,8 @@ import asyncio
 from kafka.kafkaProducer import KafkaProducerImpl
 from kafka.kafkaConsumer import KafkaConsumerHandler
 from producer import UniversalKafkaProducer
-from mysql_source import MySQLDataSource
-from neo4j_source import Neo4jDataSource
+from sources.mysql_source import MySQLDataSource
+from sources.neo4j_source import Neo4jDataSource
 
 
 async def main():

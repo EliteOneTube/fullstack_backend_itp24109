@@ -9,8 +9,12 @@ class KafkaConsumerHandler:
         self.kafka_brokers = kafka_brokers
         self.mongo_client = MongoClient(mongo_uri)
         self.mongo_db = self.mongo_client[mongo_db]
-        self.mongo_collection = self.mongo_db[mongo_collection]
         self.consumer = None
+
+        # Create MongoDB collections
+        for collection in mongo_collection:
+            if collection not in self.mongo_db.list_collection_names():
+                self.mongo_db.create_collection(collection)
 
     def connect(self) -> None:
         """Connect the Kafka consumer to the specified topic."""

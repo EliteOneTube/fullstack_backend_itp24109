@@ -1,3 +1,5 @@
+USE ClothingStore;
+
 insert into clothes (clothID, style, color, price, brand) values (1, 'sport', 'Pink', 44.07, 'Wqtsvzvque');
 insert into clothes (clothID, style, color, price, brand) values (2, 'business', 'Blue', 43.88, 'Qpkezwbvjl');
 insert into clothes (clothID, style, color, price, brand) values (3, 'lounge', 'Aquamarine', 70.52, 'Hpwxlywlms');

@@ -3,7 +3,7 @@ from kafka_messager.kafkaProducer import KafkaProducerImpl
 from kafka_messager.kafkaConsumer import KafkaConsumerHandler
 from sources.mysql_source import MySQLDataSource
 from sources.neo4j_source import Neo4jDataSource
-import sched, time
+from concurrent.futures import ThreadPoolExecutor
 
 async def main():
     # MySQL Data Source
@@ -36,17 +36,16 @@ async def main():
         mongo_collection="fused_data"
     )
 
-    s = sched.scheduler(time.time, time.sleep)
-
     # Connect Kafka Consumer to the topics
     kafka_consumer.connect()
 
     kafka_consumer.consumer.subscribe([mysql_topic, neo4j_topic])
 
-    kafka_consumer.consume()
-    mysql_producer.produce()
-    neo4j_producer.produce()
-
+    # Start the Kafka Consumer and Producers in parallel
+    with ThreadPoolExecutor(max_workers=3) as executor:
+        await asyncio.get_event_loop().run_in_executor(executor, kafka_consumer.consume)
+        await asyncio.get_event_loop().run_in_executor(executor, mysql_producer.produce)
+        await asyncio.get_event_loop().run_in_executor(executor, neo4j_producer.produce)
 
 if __name__ == "__main__":
     asyncio.run(main())

@@ -14,10 +14,12 @@ class KafkaConsumerHandler:
     def connect(self) -> None:
         """Connect the Kafka consumer to the specified topic."""
         self.consumer = KafkaConsumer(
+            'fusion-topic',
             bootstrap_servers=self.kafka_brokers,
             auto_offset_reset='earliest',
             group_id='fusion_group',
-            enable_auto_commit=True
+            enable_auto_commit=True,
+            value_deserializer=lambda x: json.loads(x.decode('utf-8'))
         )
 
     def consume(self) -> None:
@@ -27,24 +29,7 @@ class KafkaConsumerHandler:
         
         print("Starting to consume messages...")
         for message in self.consumer:
-            try:
-                print(f"Received message: {message}")
-                if "clothes" in message and "users" in message:
-                    # Perform data fusion
-                    fused_data = {
-                        "clothesID": message["clothes"]["id"],
-                        "style": message["clothes"]["style"],
-                        "price": message["clothes"]["price"],
-                        "userID": message["users"]["id"],
-                        "connections": message["users"]["connections"],
-                    }
-                    # Store the fused data in MongoDB
-                    self.mongo_collection.insert_one(fused_data)
-                    print(f"Fused data inserted: {fused_data}")
-                else:
-                    print(f"Invalid message: {message}")
-            except Exception as e:
-                print(f"Error handling message: {e}")
+            print(f"Received message: {message}")
         
     def disconnect(self) -> None:
         """Disconnect the Kafka consumer."""

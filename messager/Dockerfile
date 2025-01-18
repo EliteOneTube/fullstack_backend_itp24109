@@ -7,7 +7,7 @@ WORKDIR /app
 # Copy the application code into the container
 COPY . .
 
-RUN apt-get update && apt install netcat
+RUN apt-get update && apt-get install -y netcat-openbsd && rm -rf /var/lib/apt/lists/*
 
 COPY scripts/wait_for_services.sh /wait_for_services.sh
 RUN chmod +x /wait_for_services.sh

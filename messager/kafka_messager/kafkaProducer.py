@@ -2,7 +2,6 @@ from decimal import Decimal
 from producer import AbstractProducer
 from kafka import KafkaProducer
 import json
-import asyncio
 from source import DataSource
 
 class KafkaProducerImpl(AbstractProducer):
@@ -33,8 +32,9 @@ class KafkaProducerImpl(AbstractProducer):
         """Fetch data from the data source and publish to Kafka."""
         print(f"Producing data to Kafka topic: {self.topic}")
         data = self.data_source.fetch_data(self.rate_limit)
-        for item in data[:self.rate_limit]:
+        for item in data:
             # Use the custom serializer
+            print(f"Producing item: {item}")
             serialized_data = json.dumps(item, default=self.json_serial).encode()
             print(f"Publishing message: {serialized_data}")
             self.producer.send(self.topic, serialized_data)

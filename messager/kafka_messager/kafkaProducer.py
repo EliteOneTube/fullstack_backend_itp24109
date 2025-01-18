@@ -20,8 +20,7 @@ class KafkaProducerImpl:
         self.data_source = data_source
         self.rate_limit = rate_limit
         self.producer = KafkaProducer(
-            bootstrap_servers=brokers,
-            acks='all',                              
+            bootstrap_servers=brokers                            
         )
         self.time_interval = time_interval
 

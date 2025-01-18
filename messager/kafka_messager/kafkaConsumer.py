@@ -31,8 +31,7 @@ class KafkaConsumerHandler(AbstractConsumer):
 
         print("Starting to consume messages...")
         for message in self.consumer:
-            print(f"Received message: {message}")
-            asyncio.run(self.handle(message.value))  # Handle each message payload
+            self.handle(message.value)
 
     async def handle(self, payload: dict) -> None:
         """Handle a single message payload."""

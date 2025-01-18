@@ -14,6 +14,7 @@ class KafkaProducerImpl(AbstractProducer):
 
     async def send_and_wait(self, topic: str, message: bytes):
         """Send a message to the Kafka topic."""
+        print(f"Sending message to topic: {topic}")
         self.producer.send(topic, message)
         self.producer.flush()  # Ensure the message is sent
 
@@ -23,7 +24,7 @@ class KafkaProducerImpl(AbstractProducer):
 
 class UniversalKafkaProducer:
     """A universal Kafka producer."""
-    def __init__(self, brokers: str, topic: str, data_source: DataSource, rate_limit: int, producer: AbstractProducer):
+    def __init__(self, brokers: str, topic: str, data_source: DataSource, rate_limit: int, producer: KafkaProducerImpl):
         """
         Args:
             brokers (str): Kafka broker addresses.

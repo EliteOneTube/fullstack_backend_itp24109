@@ -22,6 +22,9 @@ class KafkaConsumerHandler(AbstractConsumer):
             enable_auto_commit=True,
             value_deserializer=lambda x: json.loads(x.decode('utf-8'))
         )
+
+        self.consumer.subscribe([topic])
+
         print(f"Connected to topic: {topic}")
 
     def consume(self) -> None:

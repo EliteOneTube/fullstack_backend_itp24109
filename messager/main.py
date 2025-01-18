@@ -43,9 +43,13 @@ async def main():
 
     # Start the Kafka Consumer and Producers in parallel
     with ThreadPoolExecutor(max_workers=3) as executor:
-        await asyncio.get_event_loop().run_in_executor(executor, kafka_consumer.consume)
-        await asyncio.get_event_loop().run_in_executor(executor, mysql_producer.produce)
-        await asyncio.get_event_loop().run_in_executor(executor, neo4j_producer.produce)
+        loop = asyncio.get_event_loop()
+        # Schedule all tasks concurrently
+        await asyncio.gather(
+            loop.run_in_executor(executor, kafka_consumer.consume),
+            loop.run_in_executor(executor, mysql_producer.produce),
+            loop.run_in_executor(executor, neo4j_producer.produce),
+        )
 
 if __name__ == "__main__":
     asyncio.run(main())

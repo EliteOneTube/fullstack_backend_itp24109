@@ -46,7 +46,7 @@ class UniversalKafkaProducer:
             print("Starting Kafka producer...")
             while True:
                 print("Fetching data...")
-                data = await self.data_source.fetch_data()
+                data = await self.data_source.fetch_data(self.rate_limit)
                 for item in data[:self.rate_limit]:
                     await self.producer.send_and_wait(self.topic, json.dumps(item).encode('utf-8'))
                 await asyncio.sleep(interval)

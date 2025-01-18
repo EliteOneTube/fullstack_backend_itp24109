@@ -46,7 +46,7 @@ async def main():
     await asyncio.gather(
         mysql_producer.produce(interval=10),  # Produce MySQL data every 10 seconds
         neo4j_producer.produce(interval=20),  # Produce Neo4j data every 20 seconds
-        kafka_consumer.process_messages(),   # Continuously consume and fuse data
+        kafka_consumer.consume(),   # Continuously consume and fuse data
     )
 
 

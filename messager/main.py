@@ -1,7 +1,6 @@
 import asyncio
 from kafka_messager.kafkaProducer import KafkaProducerImpl
 from kafka_messager.kafkaConsumer import KafkaConsumerHandler
-from kafka_messager.kafkaProducer import UniversalKafkaProducer
 from sources.mysql_source import MySQLDataSource
 from sources.neo4j_source import Neo4jDataSource
 
@@ -22,7 +21,7 @@ async def main():
         data_source=mysql_source,
         rate_limit=10  # Publish 10 messages per interval
     )
-    neo4j_producer = UniversalKafkaProducer(
+    neo4j_producer = KafkaProducerImpl(
         brokers="kafka:9092",
         topic=neo4j_topic,
         data_source=neo4j_source,

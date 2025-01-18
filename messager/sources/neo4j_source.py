@@ -1,5 +1,5 @@
 from neo4j import GraphDatabase
-from producer import DataSource
+from source import DataSource
 
 class Neo4jDataSource(DataSource):
     def __init__(self, uri: str, user: str, password: str):

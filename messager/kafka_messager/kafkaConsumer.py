@@ -25,7 +25,7 @@ class KafkaConsumerHandler:
         """Start consuming messages from Kafka."""
         if not self.consumer:
             raise RuntimeError("Kafka consumer is not connected to any topic.")
-
+        print(self.consumer.subscription)
         print("Starting to consume messages...")
         for message in self.consumer:
             try:

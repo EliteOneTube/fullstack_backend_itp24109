@@ -17,8 +17,7 @@ class KafkaConsumerHandler:
             bootstrap_servers=self.kafka_brokers,
             auto_offset_reset='earliest',
             group_id='fusion_group',
-            enable_auto_commit=True,
-            value_deserializer=lambda x: json.loads(x.decode('utf-8'))
+            enable_auto_commit=True
         )
 
     def consume(self) -> None:

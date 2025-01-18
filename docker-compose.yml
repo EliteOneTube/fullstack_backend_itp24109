@@ -58,28 +58,28 @@ services:
     volumes:
       - kafka_data:/var/lib/kafka/data
 
-    kafkaHandlers:
-      build:
-        context: ./messager
-        dockerfile: Dockerfile
-      container_name: kafkaHandlers
-      depends_on:
-        - mysql
-        - neo4j
-        - mongodb
-        - kafka
-      environment:
-        MYSQL_HOST: mysql
-        MYSQL_PORT: 3306
-        MYSQL_USER: user
-        MYSQL_PASSWORD: password
-        MYSQL_DATABASE: my_database
-        NEO4J_URI: bolt://neo4j:7687
-        NEO4J_USER: neo4j
-        NEO4J_PASSWORD: password
-        MONGODB_URI: mongodb://mongodb:27017
-        KAFKA_BROKERS: kafka:9092
-      command: ["python", "main.py"]
+  kafkaHandlers:
+    build:
+      context: ./messager
+      dockerfile: Dockerfile
+    container_name: kafkaHandlers
+    depends_on:
+      - mysql
+      - neo4j
+      - mongodb
+      - kafka
+    environment:
+      MYSQL_HOST: mysql
+      MYSQL_PORT: 3306
+      MYSQL_USER: user
+      MYSQL_PASSWORD: password
+      MYSQL_DATABASE: my_database
+      NEO4J_URI: bolt://neo4j:7687
+      NEO4J_USER: neo4j
+      NEO4J_PASSWORD: password
+      MONGODB_URI: mongodb://mongodb:27017
+      KAFKA_BROKERS: kafka:9092
+    command: ["python", "main.py"]
 
 volumes:
   mysql_data:

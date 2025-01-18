@@ -13,4 +13,4 @@ RUN chmod +x /wait_for_services.sh
 # Install dependencies
 RUN pip install -r requirements.txt
 
-ENTRYPOINT [ "/wait_form_services.sh" ]
+ENTRYPOINT [ "/wait_for_services.sh" ]

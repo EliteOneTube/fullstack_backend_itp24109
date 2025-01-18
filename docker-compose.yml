@@ -80,8 +80,6 @@ services:
       MONGODB_URI: mongodb://mongodb:27017
       KAFKA_BROKERS: kafka:9092
     command: ["python", "main.py"]
-    volumes:
-      - ./requirements.txt:/app/requirements.txt
 
 volumes:
   mysql_data:

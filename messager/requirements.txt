@@ -1,0 +1,4 @@
+kafka-python==2.0.2
+pymongo==4.10.1
+mysql-connector-python==9.1.0
+neo4j==5.27.0

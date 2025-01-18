@@ -78,6 +78,20 @@ services:
       NEO4J_PASSWORD: password
       MONGODB_URI: mongodb://mongodb:27017
       KAFKA_BROKERS: kafka:9092
+  
+  flask-api:
+    build:
+      context: ./flask  # Path to the directory containing your Dockerfile for Flask
+      dockerfile: Dockerfile             # Make sure you have a Dockerfile for your Flask app
+    container_name: flask
+    environment:
+      FLASK_APP: app.py                  # Name of your Flask app (replace with your actual app file)
+      FLASK_ENV: development             # Change to 'production' when deploying in production
+      DATABASE_URI: mongodb://mongodb:27017/yourdb  # Example of environment variable for DB connection
+    ports:
+      - "5000:5000"                      # Exposes port 5000 of the Flask API to the host machine
+    depends_on:
+      - mongodb                          # Ensure MongoDB is running before starting Flask
 
 volumes:
   mysql_data:

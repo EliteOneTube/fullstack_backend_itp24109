@@ -13,6 +13,7 @@ class KafkaProducerImpl:
             topic (str): Kafka topic to publish to.
             data_source (DataSource): Data source providing the data.
             rate_limit (int): Number of messages per interval.
+            time_interval (int): Time interval to sleep after each interval.
         """
         self.brokers = brokers
         self.topic = topic
@@ -37,17 +38,8 @@ class KafkaProducerImpl:
             # Use the custom serializer
             serialized_data = json.dumps(item, default=KafkaProducerImpl.json_serial).encode()
             self.producer.send(self.topic, serialized_data)
+            print(f"Published message: {serialized_data}")
         self.producer.flush()
-        
-
-    async def start(self):
-        """Start the Kafka producer."""
-        pass  # Kafka producer starts automatically when sending messages
-        
-
-    async def stop(self):
-        """Stop the producer."""
-        self.producer.close()
 
     def run_and_sleep(self):
         """Run the producer and sleep for a specified interval."""

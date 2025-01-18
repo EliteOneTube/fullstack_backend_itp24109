@@ -30,9 +30,3 @@ class KafkaConsumerHandler:
         print("Starting to consume messages...")
         for message in self.consumer:
             print(f"Received message: {message}")
-        
-    def disconnect(self) -> None:
-        """Disconnect the Kafka consumer."""
-        if self.consumer:
-            self.consumer.close()
-            print("Kafka consumer disconnected.")

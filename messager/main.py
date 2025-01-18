@@ -40,8 +40,6 @@ async def main():
     kafka_consumer.connect(mysql_topic)
     kafka_consumer.connect(neo4j_topic)
 
-    print(mysql_producer.data_source)
-
     # Run Producers and Consumer concurrently
     await asyncio.gather(
         mysql_producer.produce(interval=10),  # Produce MySQL data every 10 seconds

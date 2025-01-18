@@ -7,8 +7,10 @@ WORKDIR /app
 # Copy the application code into the container
 COPY . .
 
+COPY scripts/wait_for_services.sh /wait_for_services.sh
+RUN chmod +x /wait_for_services.sh
+
 # Install dependencies
 RUN pip install -r requirements.txt
 
-# Command to run your Python script
-CMD ["python", "-u", "main.py"]
+ENTRYPOINT [ "/wait_form_services.sh" ]

@@ -41,7 +41,6 @@ class UniversalKafkaProducer:
 
     async def produce(self, interval: int):
         """Fetch data from the data source and publish to Kafka."""
-        await self.producer.start()
         try:
             while True:
                 data = await self.data_source.fetch_data()

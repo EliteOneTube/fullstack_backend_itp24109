@@ -47,8 +47,8 @@ async def main():
         # Schedule all tasks concurrently
         await asyncio.gather(
             loop.run_in_executor(executor, kafka_consumer.consume),
-            loop.run_in_executor(executor, mysql_producer.produce),
-            loop.run_in_executor(executor, neo4j_producer.produce),
+            loop.run_in_executor(executor, mysql_producer.run_and_sleep),
+            loop.run_in_executor(executor, neo4j_producer.run_and_sleep),
         )
 
 if __name__ == "__main__":

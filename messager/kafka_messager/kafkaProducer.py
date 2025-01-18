@@ -1,3 +1,4 @@
+import asyncio
 from decimal import Decimal
 from kafka import KafkaProducer
 import json
@@ -46,3 +47,9 @@ class KafkaProducerImpl:
     async def stop(self):
         """Stop the producer."""
         self.producer.close()
+
+    async def run_and_sleep(self):
+        """Run the producer and sleep for a specified interval."""
+        await self.produce()
+        await asyncio.sleep(self.rate_limit)
+        await self.run_and_sleep()

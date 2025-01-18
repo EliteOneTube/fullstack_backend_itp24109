@@ -1,10 +1,9 @@
 from decimal import Decimal
-from producer import AbstractProducer
 from kafka import KafkaProducer
 import json
 from source import DataSource
 
-class KafkaProducerImpl(AbstractProducer):
+class KafkaProducerImpl:
     """A universal Kafka producer."""
     def __init__(self, brokers: str, topic: str, data_source: DataSource, rate_limit: int):
         """
@@ -13,7 +12,6 @@ class KafkaProducerImpl(AbstractProducer):
             topic (str): Kafka topic to publish to.
             data_source (DataSource): Data source providing the data.
             rate_limit (int): Number of messages per interval.
-            producer (AbstractProducer): Kafka producer implementation.
         """
         self.brokers = brokers
         self.topic = topic

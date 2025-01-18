@@ -2,10 +2,9 @@ import asyncio
 import json
 from kafka import KafkaConsumer
 from pymongo import MongoClient
-from consumer import AbstractConsumer
 
 
-class KafkaConsumerHandler(AbstractConsumer):
+class KafkaConsumerHandler:
     def __init__(self, kafka_brokers: str, mongo_uri: str, mongo_db: str, mongo_collection: str):
         self.kafka_brokers = kafka_brokers
         self.mongo_client = MongoClient(mongo_uri)
@@ -35,29 +34,25 @@ class KafkaConsumerHandler(AbstractConsumer):
         print("Starting to consume messages...")
         print(dir(self.consumer))
         for message in self.consumer:
-            self.handle(message.value)
-
-    async def handle(self, payload: dict) -> None:
-        """Handle a single message payload."""
-        try:
-            print(f"Received message: {payload}")
-            if "clothes" in payload and "users" in payload:
-                # Perform data fusion
-                fused_data = {
-                    "clothesID": payload["clothes"]["id"],
-                    "style": payload["clothes"]["style"],
-                    "price": payload["clothes"]["price"],
-                    "userID": payload["users"]["id"],
-                    "connections": payload["users"]["connections"],
-                }
-                # Store the fused data in MongoDB
-                self.mongo_collection.insert_one(fused_data)
-                print(f"Fused data inserted: {fused_data}")
-            else:
-                print(f"Invalid payload: {payload}")
-        except Exception as e:
-            print(f"Error handling message: {e}")
-
+            try:
+                print(f"Received message: {payload}")
+                if "clothes" in payload and "users" in payload:
+                    # Perform data fusion
+                    fused_data = {
+                        "clothesID": payload["clothes"]["id"],
+                        "style": payload["clothes"]["style"],
+                        "price": payload["clothes"]["price"],
+                        "userID": payload["users"]["id"],
+                        "connections": payload["users"]["connections"],
+                    }
+                    # Store the fused data in MongoDB
+                    self.mongo_collection.insert_one(fused_data)
+                    print(f"Fused data inserted: {fused_data}")
+                else:
+                    print(f"Invalid payload: {payload}")
+            except Exception as e:
+                print(f"Error handling message: {e}")
+        
     def disconnect(self) -> None:
         """Disconnect the Kafka consumer."""
         if self.consumer:

@@ -15,23 +15,18 @@ async def main():
     neo4j_source = Neo4jDataSource(uri="bolt://localhost:7687", user="neo4j", password="password")
     neo4j_topic = "users-topic"
 
-    # Kafka Producer Implementation
-    kafka_producer = KafkaProducerImpl(bootstrap_servers="kafka:9092")
-
     # Universal Kafka Producers
-    mysql_producer = UniversalKafkaProducer(
+    mysql_producer = KafkaProducerImpl(
         brokers="kafka:9092",
         topic=mysql_topic,
         data_source=mysql_source,
-        rate_limit=10,  # Publish 10 messages per interval
-        producer=kafka_producer
+        rate_limit=10  # Publish 10 messages per interval
     )
     neo4j_producer = UniversalKafkaProducer(
         brokers="kafka:9092",
         topic=neo4j_topic,
         data_source=neo4j_source,
-        rate_limit=5,  # Publish 5 messages per interval
-        producer=kafka_producer
+        rate_limit=5  # Publish 5 messages per interval
     )
 
     # Kafka Consumer for Data Fusion

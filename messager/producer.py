@@ -9,7 +9,7 @@ class AbstractProducer(ABC):
         pass
 
     @abstractmethod
-    async def send_and_wait(self, topic: str, message: bytes):
+    async def produce(self, topic: str, message: bytes):
         """Send a message to the Kafka topic."""
         pass
 

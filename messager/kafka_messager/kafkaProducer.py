@@ -35,9 +35,7 @@ class KafkaProducerImpl(AbstractProducer):
         data = self.data_source.fetch_data(self.rate_limit)
         for item in data:
             # Use the custom serializer
-            print(f"Producing item: {item}")
             serialized_data = json.dumps(item, default=KafkaProducerImpl.json_serial).encode()
-            print(f"Publishing message: {serialized_data}")
             self.producer.send(self.topic, serialized_data)
         self.producer.flush()
         

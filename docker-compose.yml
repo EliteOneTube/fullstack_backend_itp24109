@@ -58,7 +58,7 @@ services:
     volumes:
       - kafka_data:/var/lib/kafka/data
 
-  kafkaHandlers:
+  kafka_handlers:
     build:
       context: ./messager
       dockerfile: Dockerfile

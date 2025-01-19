@@ -39,6 +39,7 @@ class KafkaConsumerHandler:
             if message.topic == 'clothes-topic':
                 self.mongo_db['clothes'].insert_one(message.value)
             elif message.topic == 'users-topic':
+                print(f"Consumed message: {message.value}")
                 user_id = message.value.get('userID')
                 existing_user = self.mongo_db['users'].find_one({'userID': user_id})
                 
@@ -49,7 +50,7 @@ class KafkaConsumerHandler:
                         {
                             '$addToSet': {
                                 'relationships': {'$each': message.value.get('relationships', [])},
-                                'purchased': {'$each': message.value.get('products_bought', [])}
+                                'purchased': {'$each': message.value.get('purchased', [])}
                             }
                         }
                     )

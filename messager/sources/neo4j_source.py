@@ -8,21 +8,15 @@ class Neo4jDataSource(DataSource):
     def fetch_data(self, rate_limit: int) -> list:
         """Fetch data from Neo4j."""
         session = self.driver.session()
-        query = """
-        MATCH (u:User)
-        OPTIONAL MATCH (u)-[r]->()
-        RETURN u, r LIMIT %s
-        """ % rate_limit  # Adjusted query with OPTIONAL MATCH to handle users without relationships
-        result = session.run(query)
-        users = []
-
-        for record in result:
-            user_data = record["u"]
-            relationships = record["r"] if record["r"] else []  # Handle the case where there might be no relationships
-            users.append({
-                "id": user_data.id,
-                "connections": [rel.id for rel in relationships]
-            })
+        query = f"""
+        MATCH (n)
+        RETURN n
+        LIMIT {rate_limit}
+        """
+        with self.driver.session() as session:
+            result = session.run(query)
+            records = [record["n"] for record in result]
+            return records
 
         session.close()
         return users

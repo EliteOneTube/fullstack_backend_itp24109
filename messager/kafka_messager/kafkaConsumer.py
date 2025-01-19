@@ -39,4 +39,20 @@ class KafkaConsumerHandler:
             if message.topic == 'clothes-topic':
                 self.mongo_db['clothes'].insert_one(message.value)
             elif message.topic == 'users-topic':
-                self.mongo_db['users'].insert_one(message.value)
+                user_id = message.value.get('user_id')
+                existing_user = self.mongo_db['users'].find_one({'user_id': user_id})
+                
+                if existing_user:
+                    # Update the existing user with new relationships and products bought
+                    self.mongo_db['users'].update_one(
+                        {'user_id': user_id},
+                        {
+                            '$addToSet': {
+                                'relationships': {'$each': message.value.get('relationships', [])},
+                                'products_bought': {'$each': message.value.get('products_bought', [])}
+                            }
+                        }
+                    )
+                else:
+                    # Insert new user document
+                    self.mongo_db['users'].insert_one(message.value)

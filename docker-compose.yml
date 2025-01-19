@@ -98,4 +98,4 @@ volumes:
   neo4j_data:
   mongo_data:
   kafka_data:
-  zookeeper_data:
+  zookeeper-data:

@@ -1,3 +1,4 @@
+import datetime
 import time
 from decimal import Decimal
 from kafka import KafkaProducer
@@ -29,6 +30,10 @@ class KafkaProducerImpl:
         """JSON serializer for objects not serializable by default."""
         if isinstance(obj, Decimal):
             return float(obj)
+        elif isinstance(obj, datetime):
+            return obj.isoformat()
+        elif isinstance(obj, frozenset):  # For Neo4j labels
+            return list(obj)
         raise TypeError(f"Type {type(obj)} not serializable")
 
 
@@ -36,11 +41,14 @@ class KafkaProducerImpl:
         """Fetch data from the data source and publish to Kafka."""
         print(f"Producing data to Kafka topic: {self.topic}")
         data = self.data_source.fetch_data(self.rate_limit)
-        for item in data:
-            # Use the custom serializer
-            serialized_data = json.dumps(item, default=KafkaProducerImpl.json_serial).encode()
-            self.producer.send(self.topic, serialized_data)
-        self.producer.flush()
+        try:
+            for item in data:
+                node_data = dict(item)  # Extract properties as a dictionary
+                serialized_data = json.dumps(node_data, default=KafkaProducerImpl.json_serial).encode()
+                self.producer.send(self.topic, serialized_data)
+            self.producer.flush()
+        except Exception as e:
+            print(f"Error producing data to Kafka: {e}")
  
     def run_and_sleep(self):
         """Run the producer and sleep for a specified interval."""

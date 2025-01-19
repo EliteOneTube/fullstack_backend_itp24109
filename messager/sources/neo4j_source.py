@@ -6,7 +6,7 @@ class Neo4jDataSource(DataSource):
         self.driver = GraphDatabase.driver(uri, auth=(user, password))
     
     def fetch_data(self, rate_limit: int) -> list:
-    """Fetch data from Neo4j."""
+        """Fetch data from Neo4j."""
         query = f"""
         MATCH (n)
         RETURN n

@@ -15,7 +15,7 @@ def get_user_products(user_id):
     """Fetch products purchased by the user, their friends, and colleagues."""
     
     # Get user data from MongoDB
-    user = users_collection.find_one({"user_id": user_id})
+    user = users_collection.find_one({"userID": user_id})
     
     if not user:
         return jsonify({"error": "User not found"}), 404
@@ -50,7 +50,7 @@ def recommend_product(user_id):
     or recommend the most popular product if none are found."""
     
     # Get user data from MongoDB
-    user = users_collection.find_one({"user_id": user_id})
+    user = users_collection.find_one({"userID": user_id})
     
     if not user:
         return jsonify({"error": "User not found"}), 404
@@ -60,12 +60,12 @@ def recommend_product(user_id):
     
     friends_and_colleagues = user.get("friends", []) + user.get("colleagues", [])
     
-    purchased_product_ids = set(product["product_id"] for product in products_collection.find({"user_id": user_id}))
+    purchased_product_ids = set(product["clothID"] for product in products_collection.find({"user_id": user_id}))
     
     for person_id in friends_and_colleagues:
         person_products = products_collection.find({"user_id": person_id})
         for product in person_products:
-            if product["product_id"] not in purchased_product_ids:
+            if product["clothID"] not in purchased_product_ids:
                 recommended_products.append(product)
 
     # If we found recommended products, return them
@@ -81,7 +81,7 @@ def popular_recommend_product(user_id):
     """Recommend the most popular product that the user has not purchased."""
     
     # Get user data from MongoDB
-    user = users_collection.find_one({"user_id": user_id})
+    user = users_collection.find_one({"userID": user_id})
     
     if not user:
         return jsonify({"error": "User not found"}), 404
@@ -89,18 +89,18 @@ def popular_recommend_product(user_id):
     # Get the products purchased by the user's colleagues
     colleagues_products = set()
     for colleague_id in user.get("colleagues", []):
-        colleague_products = products_collection.find({"user_id": colleague_id})
+        colleague_products = products_collection.find({"userID": colleague_id})
         for product in colleague_products:
-            colleagues_products.add(product["product_id"])
+            colleagues_products.add(product["clothID"])
     
     # Get products already purchased by the user
-    purchased_product_ids = set(product["product_id"] for product in products_collection.find({"user_id": user_id}))
+    purchased_product_ids = set(product["clothID"] for product in products_collection.find({"userID": user_id}))
     
     # If the user has purchased all the products their colleagues have bought, suggest the most popular one
     if colleagues_products.issubset(purchased_product_ids):
         # Get the most popular product that the user has not purchased
         popular_product = products_collection.aggregate([
-            {"$group": {"_id": "$product_id", "count": {"$sum": 1}}},
+            {"$group": {"_id": "$clothID", "count": {"$sum": 1}}},
             {"$sort": {"count": -1}},
             {"$limit": 1}
         ])
@@ -109,7 +109,7 @@ def popular_recommend_product(user_id):
             popular_product_id = product["_id"]
             if popular_product_id not in purchased_product_ids:
                 # If the user hasn't purchased the popular product, return it
-                recommended_product = products_collection.find_one({"product_id": popular_product_id})
+                recommended_product = products_collection.find_one({"clothID": popular_product_id})
                 if recommended_product:
                     return jsonify(recommended_product), 200
     

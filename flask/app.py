@@ -5,7 +5,7 @@ from bson.json_util import dumps
 app = Flask(__name__)
 
 # MongoDB Connection
-client = MongoClient("mongodb://localhost:27017")  # Replace with your MongoDB URI
+client = MongoClient("mongodb://mongodb:27017")  # Replace with your MongoDB URI
 db = client["users_db"]
 users_collection = db["users"]
 products_collection = db["products"]

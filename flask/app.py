@@ -6,9 +6,9 @@ app = Flask(__name__)
 
 # MongoDB Connection
 client = MongoClient("mongodb://mongodb:27017")  # Replace with your MongoDB URI
-db = client["users_db"]
+db = client["fusion_db"]
 users_collection = db["users"]
-products_collection = db["products"]
+products_collection = db["clothes"]
 
 @app.route("/user/<user_id>/products", methods=["GET"])
 def get_user_products(user_id):

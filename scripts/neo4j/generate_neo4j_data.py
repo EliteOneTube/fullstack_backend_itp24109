@@ -16,7 +16,9 @@ def generate_neo4j_data(num_users=100, max_purchased=1000, filename="neo4j_data.
                 while target_id == user_id:  # Avoid self-relations
                     target_id = random.randint(1, num_users)
                 relationship = random.choice(relationships)
-                f.write(f'CREATE (u{user_id})-[:{relationship}]->(u{target_id});\n')
+                # Write Cypher query to create a relationship between the users
+                f.write(f'MATCH (a:User {{userID: {user_id}}}), (b:User {{userID: {target_id}}})\n')
+                f.write(f'CREATE (a)-[:{relationship}]->(b);\n')
 
     print(f"Cypher script generated: {filename}")
 

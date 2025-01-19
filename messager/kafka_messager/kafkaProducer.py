@@ -36,7 +36,6 @@ class KafkaProducerImpl:
         """Fetch data from the data source and publish to Kafka."""
         print(f"Producing data to Kafka topic: {self.topic}")
         data = self.data_source.fetch_data(self.rate_limit)
-        print(f"Data fetched: {data}")
         for item in data:
             # Use the custom serializer
             serialized_data = json.dumps(item, default=KafkaProducerImpl.json_serial).encode()

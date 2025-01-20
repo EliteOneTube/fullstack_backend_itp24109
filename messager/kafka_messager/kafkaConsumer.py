@@ -24,8 +24,7 @@ class KafkaConsumerHandler:
             bootstrap_servers=self.kafka_brokers,
             auto_offset_reset='earliest',
             group_id='fusion_group',
-            enable_auto_commit=True,
-            value_deserializer=lambda x: json.loads(x.decode('utf-8'))
+            enable_auto_commit=True
         )
 
     def consume(self) -> None:
@@ -37,7 +36,6 @@ class KafkaConsumerHandler:
         for message in self.consumer:
             try:
                 message_value = json.loads(message.value)  # Assuming JSON encoding for Kafka messages
-                print(f"Received message: {message_value}")
                 if message.topic == 'clothes-topic':
                     # Insert data into 'clothes' collection
                     clothe_id = message_value.get('clothID')

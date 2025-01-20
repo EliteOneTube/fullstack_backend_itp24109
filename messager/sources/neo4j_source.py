@@ -18,4 +18,5 @@ class Neo4jDataSource(DataSource):
             result = session.run(query)
             records = [record["a"] for record in result]  # Extract nodes from the query result
         self.start_position += rate_limit  # Increase start position by rate limit
+        print(f"Fetched {records} records from Neo4j.")
         return records

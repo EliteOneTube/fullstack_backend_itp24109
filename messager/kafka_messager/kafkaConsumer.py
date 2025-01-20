@@ -37,7 +37,7 @@ class KafkaConsumerHandler:
         for message in self.consumer:
             try:
                 message_value = json.loads(message.value)  # Assuming JSON encoding for Kafka messages
-                
+                print(message.topic)
                 if message.topic == 'clothes-topic':
                     # Insert data into 'clothes' collection
                     clothe_id = message_value.get('clothID')
@@ -51,7 +51,6 @@ class KafkaConsumerHandler:
 
                     self.mongo_db['clothes'].insert_one(message_value)
                 elif message.topic == 'users-topic':
-                    print(message)
                     user_id = message_value.get('userID')
                     if user_id is None:
                         continue  # Skip this message if no userID is found

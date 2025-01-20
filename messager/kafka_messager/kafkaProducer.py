@@ -86,7 +86,6 @@ class KafkaProducerImpl:
             for item in data:
                 node_data = dict(item)  # Extract properties as a dictionary
                 serialized_data = json.dumps(node_data, default=KafkaProducerImpl.json_serial).encode()
-                print(f"Producing data: {serialized_data}")
                 self.producer.send(self.topic, serialized_data)
             self.producer.flush()
         except Exception as e:

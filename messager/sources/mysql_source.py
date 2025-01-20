@@ -10,10 +10,12 @@ class MySQLDataSource(DataSource):
             database=database
         )
         self.cursor = self.connection.cursor(dictionary=True)
+        self.start_position = 0
 
     def fetch_data(self, rate_limit: int) -> list:
-        """Fetch data from MySQL."""
-        query = "SELECT * FROM clothes LIMIT %s" % rate_limit
+        """Fetch data from MySQL starting from a specific position."""
+        query = "SELECT * FROM clothes LIMIT %s, %s" % (self.start_position, rate_limit)
         self.cursor.execute(query)
         result = self.cursor.fetchall()
+        self.start_position += rate_limit
         return result

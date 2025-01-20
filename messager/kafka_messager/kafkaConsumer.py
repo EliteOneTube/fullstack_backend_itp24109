@@ -35,25 +35,42 @@ class KafkaConsumerHandler:
         
         print("Starting to consume messages...")
         for message in self.consumer:
-            #If the topic is 'clothes-topic', insert the data into the MongoDB collection 'clothes', else insert into 'users'
-            if message.topic == 'clothes-topic':
-                self.mongo_db['clothes'].insert_one(message.value)
-            elif message.topic == 'users-topic':
-                print(f"Consumed message: {message.value}")
-                user_id = message.value.get('userID')
-                existing_user = self.mongo_db['users'].find_one({'userID': user_id})
+            try:
+                message_value = json.loads(message.value)  # Assuming JSON encoding for Kafka messages
                 
-                if existing_user:
-                    # Update the existing user with new relationships and products bought
-                    self.mongo_db['users'].update_one(
-                        {'userID': user_id},
-                        {
-                            '$addToSet': {
-                                'relationships': {'$each': message.value.get('relationships', [])},
-                                'purchased': {'$each': message.value.get('purchased', [])}
+                if message.topic == 'clothes-topic':
+                    # Insert data into 'clothes' collection
+                    clothe_id = message_value.get('clothID')
+                    if clothe_id is None:
+                        continue  # Skip this message if no clotheID is found
+
+                    existing_clothe = self.mongo_db['clothes'].find_one({'clothID': clothe_id})
+
+                    if existing_clothe:
+                        continue  # Skip this message if clothe already exists
+
+                    self.mongo_db['clothes'].insert_one(message_value)
+                elif message.topic == 'users-topic':
+                    user_id = message_value.get('userID')
+                    if user_id is None:
+                        continue  # Skip this message if no userID is found
+
+                    existing_user = self.mongo_db['users'].find_one({'userID': user_id})
+
+                    if existing_user:
+                        self.mongo_db['users'].update_one(
+                            {'userID': user_id},
+                            {
+                                '$addToSet': {
+                                    'relationships': {'$each': message_value.get('relationships', [])},
+                                    'purchased': {'$each': message_value.get('purchased', [])}
+                                }
                             }
-                        }
-                    )
-                else:
-                    # Insert new user document
-                    self.mongo_db['users'].insert_one(message.value)
+                        )
+                    else:
+                        self.mongo_db['users'].insert_one(message_value)
+
+            except json.JSONDecodeError as e:
+                pass
+            except Exception as e:
+                pass

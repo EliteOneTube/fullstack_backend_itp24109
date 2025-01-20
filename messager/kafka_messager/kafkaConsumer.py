@@ -51,6 +51,7 @@ class KafkaConsumerHandler:
 
                     self.mongo_db['clothes'].insert_one(message_value)
                 elif message.topic == 'users-topic':
+                    print(message_value)
                     user_id = message_value.get('userID')
                     if user_id is None:
                         continue  # Skip this message if no userID is found

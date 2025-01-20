@@ -1,6 +1,7 @@
 import datetime
 import time
 from decimal import Decimal
+from fullstack_backend_itp24109.messager.sources.neo4j_source import Neo4jDataSource
 from kafka import KafkaProducer
 import json
 from source import DataSource
@@ -36,11 +37,51 @@ class KafkaProducerImpl:
             return list(obj)
         raise TypeError(f"Type {type(obj)} not serializable")
 
+    @staticmethod
+    def process_neo4j_data(data):
+        """Process Neo4j data to a serializable format."""
+        processed_data = []
+
+        for item in data:
+            user_node = item['user']  # Node representing the main user
+            related_user_node = item['related_user']  # Node representing the related user
+            relationship = item['relationship']  # Relationship object
+
+            # Extract user and relationship details
+            user_data = user_node._properties  # All properties of the user node
+            related_user_id = related_user_node['userID']  # Related user's ID
+            relationship_type = relationship.type  # Type of the relationship
+
+            # Find if the user already exists in the processed data
+            existing_entry = next((entry for entry in processed_data if entry['userID'] == user_data['userID']), None)
+
+            # If user already exists, append to their relationships
+            if existing_entry:
+                existing_entry['relationships'].append({
+                    'related_userID': related_user_id,
+                    'relationship_type': relationship_type
+                })
+            else:
+                # Add new user entry with relationships
+                user_entry = {
+                    **user_data,  # Include all user properties
+                    "relationships": [
+                        {
+                            "related_userID": related_user_id,
+                            "relationship_type": relationship_type
+                        }
+                    ]
+                }
+                processed_data.append(user_entry)
+        
+        return processed_data
 
     def produce(self):
         """Fetch data from the data source and publish to Kafka."""
         print(f"Producing data to Kafka topic: {self.topic}")
         data = self.data_source.fetch_data(self.rate_limit)
+        if isinstance(self.data_source, Neo4jDataSource):
+            data = KafkaProducerImpl.process_neo4j_data(data)
         try:
             for item in data:
                 node_data = dict(item)  # Extract properties as a dictionary

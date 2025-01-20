@@ -37,7 +37,7 @@ class KafkaConsumerHandler:
         for message in self.consumer:
             try:
                 message_value = json.loads(message.value)  # Assuming JSON encoding for Kafka messages
-                print(message.topic)
+                print(f"Received message: {message_value}")
                 if message.topic == 'clothes-topic':
                     # Insert data into 'clothes' collection
                     clothe_id = message_value.get('clothID')

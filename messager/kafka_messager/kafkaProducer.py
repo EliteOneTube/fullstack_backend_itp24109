@@ -1,7 +1,7 @@
 import datetime
 import time
 from decimal import Decimal
-from fullstack_backend_itp24109.messager.sources.neo4j_source import Neo4jDataSource
+from sources.neo4j_source import Neo4jDataSource
 from kafka import KafkaProducer
 import json
 from source import DataSource

@@ -14,7 +14,7 @@ class MySQLDataSource(DataSource):
 
     def fetch_data(self, rate_limit: int) -> list:
         """Fetch data from MySQL starting from a specific position."""
-        query = "SELECT * FROM clothes LIMIT %s, %s" % (self.start_position, rate_limit)
+        query = "SELECT * FROM clothes WHERE clothID > %s ORDER BY clothID ASC LIMIT %s" % (self.start_position, rate_limit)
         self.cursor.execute(query)
         result = self.cursor.fetchall()
         self.start_position += rate_limit

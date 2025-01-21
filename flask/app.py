@@ -1,6 +1,7 @@
 from flask import Flask, jsonify
 from pymongo import MongoClient
 from bson.json_util import dumps
+import logging
 
 app = Flask(__name__)
 
@@ -14,6 +15,8 @@ products_collection = db["clothes"]
 def get_user_products(user_id):
     """Fetch products purchased by the user, their friends, and colleagues."""
     
+    logging.error(user_id)
+
     # Get user data from MongoDB
     user = users_collection.find_one({"userID": user_id})
     

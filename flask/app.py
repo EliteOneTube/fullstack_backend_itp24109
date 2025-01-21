@@ -25,12 +25,12 @@ def get_user_products(user_id):
 
     # Step 2: Add the user's own purchased items
     user_purchased_ids = user.get("purchased", [])
-    user_products = clothes_collection.find({"clothID": {"$in": user_purchased_ids}})
+    user_products = clothes_collection.find({"clothID": {"$in": user_purchased_ids}}, {"_id": 0})
     purchased_products.extend(user_products)
 
     # Step 3: Fetch profiles of friends and colleagues
     related_user_ids = [rel["related_userID"] for rel in user.get("relationships", [])]
-    related_users = users_collection.find({"userID": {"$in": related_user_ids}})
+    related_users = users_collection.find({"userID": {"$in": related_user_ids}}, {"_id": 0})
 
     # Step 4: Fetch products purchased by friends and colleagues
     related_purchased_ids = []

@@ -38,7 +38,7 @@ def get_user_products(user_id):
         related_purchased_ids.extend(related_user.get("purchased", []))
 
     if related_purchased_ids:
-        related_products = clothes_collection.find({"clothID": {"$in": related_purchased_ids}})
+        related_products = clothes_collection.find({"clothID": {"$in": related_purchased_ids}}, {"_id": 0})
         purchased_products.extend(related_products)
 
     # If no products found, return a message

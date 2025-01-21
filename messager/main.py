@@ -6,19 +6,38 @@ from sources.neo4j_source import Neo4jDataSource
 from concurrent.futures import ThreadPoolExecutor
 from kafka.admin import NewTopic
 from kafka import KafkaAdminClient
+import os
 
 async def main():
+    # Kafka
+    kafka_brokers = os.getenv("KAFKA_BROKERS")
+
+    # MongoDB Data Source
+    mongo_uri = os.getenv("MONGO_URI")
+    mongo_db = os.getenv("MONGO_DATABASE")
+
+    # Neo4j Data Source
+    neo4j_uri = os.getenv("NEO4J_URI")
+    neo4j_user = os.getenv("NEO4J_USER")
+    neo4j_password = os.getenv("NEO4J_PASSWORD")
+
     # MySQL Data Source
-    mysql_source = MySQLDataSource(host="mysql", user="root", password="rootpassword", database="ClothingStore")
+    mysql_host = os.getenv("MYSQL_HOST")
+    mysql_user = os.getenv("MYSQL_USER")
+    mysql_password = os.getenv("MYSQL_PASSWORD")
+    mysql_database = os.getenv("MYSQL_DATABASE")
+
+    # MySQL Data Source
+    mysql_source = MySQLDataSource(host=mysql_host, user=mysql_user, password=mysql_password, database=mysql_database)
     mysql_topic = "clothes-topic"
 
     # Neo4j Data Source
-    neo4j_source = Neo4jDataSource(uri="bolt://neo4j:7687", user="neo4j", password="password")
+    neo4j_source = Neo4jDataSource(uri=neo4j_uri, user=neo4j_user, password=neo4j_password)
     neo4j_topic = "users-topic"
 
     # Create Kafka topics
     try:
-        admin_client = KafkaAdminClient(bootstrap_servers="kafka:9092")
+        admin_client = KafkaAdminClient(bootstrap_servers=kafka_brokers)
         admin_client.create_topics([
             NewTopic(name=mysql_topic, num_partitions=1, replication_factor=1),
             NewTopic(name=neo4j_topic, num_partitions=1, replication_factor=1)
@@ -28,25 +47,25 @@ async def main():
 
     # Universal Kafka Producers
     mysql_producer = KafkaProducerImpl(
-        brokers="kafka:9092",
+        brokers=kafka_brokers,
         topic=mysql_topic,
         data_source=mysql_source,
-        rate_limit=10,  # Publish 10 messages per interval
-        time_interval=10  # Sleep for 5 seconds after each interval
+        rate_limit=10,
+        time_interval=10
     )
     neo4j_producer = KafkaProducerImpl(
-        brokers="kafka:9092",
+        brokers=kafka_brokers,
         topic=neo4j_topic,
         data_source=neo4j_source,
-        rate_limit=5,  # Publish 5 messages per interval
-        time_interval=20  # Sleep for 10 seconds after each interval
+        rate_limit=5,
+        time_interval=20 
     )
 
     # Kafka Consumer for Data Fusion
     kafka_consumer = KafkaConsumerHandler(
-        kafka_brokers="kafka:9092",
-        mongo_uri="mongodb://mongodb:27017/",
-        mongo_db="fusion_db",
+        kafka_brokers=kafka_brokers,
+        mongo_uri=mongo_uri,
+        mongo_db=mongo_db,
         mongo_collections=["clothes", "users"]
     )
 

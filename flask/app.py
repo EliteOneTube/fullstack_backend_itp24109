@@ -11,6 +11,7 @@ db = client["fusion_db"]
 users_collection = db["users"]
 products_collection = db["clothes"]
 
+@app.route("/user/<user_id>/products/", methods=["GET"])
 @app.route("/user/<user_id>/products", methods=["GET"])
 def get_user_products(user_id):
     """Fetch products purchased by the user, their friends, and colleagues."""
@@ -18,7 +19,7 @@ def get_user_products(user_id):
     logging.error(user_id)
 
     # Get user data from MongoDB
-    user = users_collection.find_one({"userID": user_id})
+    user = users_collection.find_one({"userID": int(user_id)})
     
     if not user:
         return jsonify({"error": "User not found"}), 404

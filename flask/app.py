@@ -1,12 +1,13 @@
 from flask import Flask, jsonify
 from pymongo import MongoClient
 from bson.json_util import dumps
-import logging
+import os
 
 app = Flask(__name__)
 
 # MongoDB Connection
-client = MongoClient("mongodb://mongodb:27017")  # Replace with your MongoDB URI
+database_uri = os.getenv("DATABASE_URI")
+client = MongoClient(database_uri)  # Replace with your MongoDB URI
 db = client["fusion_db"]
 users_collection = db["users"]
 clothes_collection = db["clothes"]

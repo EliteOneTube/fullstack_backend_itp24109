@@ -84,15 +84,15 @@ services:
   
   flask-api:
     build:
-      context: ./flask  # Path to the directory containing your Dockerfile for Flask
-      dockerfile: Dockerfile             # Make sure you have a Dockerfile for your Flask app
+      context: ./flask
+      dockerfile: Dockerfile
     container_name: flask
     environment:
-      DATABASE_URI: mongodb://mongodb:27017/yourdb  # Example of environment variable for DB connection
+      DATABASE_URI: mongodb://mongodb:27017 
     ports:
-      - "5000:5000"                      # Exposes port 5000 of the Flask API to the host machine
+      - "5000:5000"
     depends_on:
-      - mongodb                          # Ensure MongoDB is running before starting Flask
+      - mongodb
 
 volumes:
   mysql_data:

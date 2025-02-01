@@ -1,16 +1,23 @@
-
-# Extract Transform Load procedure
+# Extract Transform Load Procedure
 
 ## Tech Stack
 
-**Server:** Flask(python)
+**Server:** Flask (Python)
 
-**Database:** MongoDB, Neo4j, Mysql
+**Database:** MongoDB, Neo4j, MySQL
 
 **Messaging**: Kafka
 
-
 ## Environment Variables
+
+### Configuration
+
+Before running the application, you **must configure** the environment variables.
+
+1. Rename `template.env` to `.env`.
+2. Update the values inside `.env` as needed to match your setup.
+
+Docker Compose will automatically load environment variables from the `.env` file when starting the containers.
 
 ### Database
 
@@ -25,17 +32,20 @@ All passwords have a default value in `docker-compose.yml`. (Keep in mind that y
 #### Volumes
 
 The location of where the data is saved is also configurable in `docker-compose.yml`.
+
 ## Installation
     
-- Will raise 5 containers. One for each database, one for flask server, one for Kafka and one for the producers & consumers of Kafka.
+This setup will raise 5 containers: one for each database, one for the Flask server, one for Kafka, and one for the Kafka producers & consumers.
+
 ```bash
 docker compose up -d
 ```
+
 ## Scripts
 
 To populate the databases with dummy data for testing, you can run the following commands. This setup ensures both the relational (MySQL) and graph (Neo4j) databases are initialized with appropriate dummy data.
 
-### Mysql
+### MySQL
 ```bash
 sudo docker exec -i mysql mysql -u root -prootpassword < scripts/mysql/create_database.sql
 ```
@@ -53,7 +63,7 @@ python3 scripts/neo4j/generate_neo4j_data.py
 ```bash
 sudo docker exec -i neo4j cypher-shell -u neo4j -p password < neo4j_data.cypher
 ```
+
 ## Authors
 
 - [@EliteOneTube](https://github.com/EliteOneTube)
-

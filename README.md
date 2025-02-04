@@ -25,10 +25,6 @@ Docker Compose will automatically load environment variables from the `.env` fil
 
 All ports are configured in the file `docker-compose.yml`.
 
-#### Passwords
-
-All passwords have a default value in `docker-compose.yml`. (Keep in mind that you should change the values both here and in the script commands)
-
 #### Volumes
 
 The location of where the data is saved is also configurable in `docker-compose.yml`.

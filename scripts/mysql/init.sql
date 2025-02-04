@@ -4,7 +4,7 @@ CREATE DATABASE IF NOT EXISTS ClothingStore;
 CREATE USER 'jason'@'%' IDENTIFIED BY 'ilovejason';
 
 -- Grant all privileges on the new database to the user
-GRANT ALL PRIVILEGES ON your_database.* TO 'jason'@'%';
+GRANT ALL PRIVILEGES ON ClothingStore.* TO 'jason'@'%';
 
 -- Flush privileges to apply the changes
 FLUSH PRIVILEGES;

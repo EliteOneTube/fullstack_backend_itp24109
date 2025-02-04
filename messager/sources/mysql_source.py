@@ -17,5 +17,9 @@ class MySQLDataSource(DataSource):
         query = "SELECT * FROM clothes WHERE clothID > %s ORDER BY clothID ASC LIMIT %s" % (self.start_position, rate_limit)
         self.cursor.execute(query)
         result = self.cursor.fetchall()
+
+        if not result:
+            return []
+
         self.start_position += rate_limit
         return result

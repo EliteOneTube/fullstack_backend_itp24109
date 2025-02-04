@@ -14,8 +14,12 @@ class Neo4jDataSource(DataSource):
         SKIP {self.start_position}
         LIMIT {rate_limit}
         """
-        with self.driver.session() as session:  # Use 'with' to ensure session closure
+        with self.driver.session() as session:
             result = session.run(query)
             records = [{"user": record["u"], "relationship": record["r"], "related_user": record["v"]} for record in result]  # Extract users and their relationships from the query result
-        self.start_position += rate_limit  # Increase start position by rate limit
+        
+        if not records:
+            return []
+        
+        self.start_position += rate_limit
         return records

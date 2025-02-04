@@ -43,10 +43,6 @@ To populate the databases with dummy data for testing, you can run the following
 
 ### MySQL
 ```bash
-sudo docker exec -i mysql mysql -u root -prootpassword < scripts/mysql/create_database.sql
-```
-
-```bash
 sudo docker exec -i mysql mysql -u root -prootpassword < scripts/mysql/clothes.sql
 ```
 

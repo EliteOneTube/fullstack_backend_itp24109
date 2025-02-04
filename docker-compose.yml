@@ -9,6 +9,7 @@ services:
       MYSQL_DATABASE: ${MYSQL_DATABASE}
       MYSQL_USER: ${MYSQL_USER}
       MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+      APP_ENV: ${APP_ENV}
     ports:
       - "${MYSQL_PORT}:${MYSQL_PORT}"
     volumes:
